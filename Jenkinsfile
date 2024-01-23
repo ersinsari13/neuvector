@@ -12,20 +12,20 @@ pipeline {
                 sh 'docker login -u admin -p Ersin_13 18.206.242.151:8085'
                 }
         }
-        stage('Package application') {
-            steps {
-                agent {
-                    docker {
-                        image 'maven:3.9.5-amazoncorretto-17'
-                        args '-v $HOME/.m2:/root/.m2'
-                        reuseNode true
-                    }
-                }
-                steps {
-                    sh 'mvn clean package'
-                }
-            }
-        }
+        // stage('Package application') {
+        //     steps {
+        //         agent {
+        //             docker {
+        //                 image 'maven:3.9.5-amazoncorretto-17'
+        //                 args '-v $HOME/.m2:/root/.m2'
+        //                 reuseNode true
+        //             }
+        //         }
+        //         steps {
+        //             sh 'mvn clean package'
+        //         }
+        //     }
+        // }
         stage('Prepare Tags for Docker Images') {
             steps {
                 echo 'Preparing Tags for Docker Images'
