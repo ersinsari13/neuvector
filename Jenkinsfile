@@ -9,7 +9,7 @@ pipeline {
         stage('Log in to Nexus') {
             steps {
                 echo "logging to nexus "
-                sh 'docker login -u admin -p Ersin_13 '
+                sh 'docker login -u admin -p Ersin_13 18.206.242.151:8085'
                 }
         }
         stage('Package application') {
