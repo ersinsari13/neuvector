@@ -37,7 +37,7 @@ pipeline {
         stage('Build App Docker Images') {
             steps {
                 echo 'Building App Dev Images'
-                sh "docker build --force-rm -t '${IMAGE_TAG_PETCLINIC}' ."
+                sh "docker build --force-rm -t '${IMAGE_TAG}' ."
                 sh 'docker image ls'
             }
         }
