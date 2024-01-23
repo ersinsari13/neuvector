@@ -29,7 +29,7 @@ pipeline {
         stage('Build App Docker Images') {
             steps {
                 echo 'Building App Dev Images'
-                sh "docker build --force-rm -t "${IMAGE_TAG_PETCLINIC}" ."
+                sh "docker build --force-rm -t '${IMAGE_TAG_PETCLINIC}' ."
                 sh 'docker image ls'
             }
         }
@@ -55,7 +55,7 @@ pipeline {
         stage('Push Images to ECR Repo') {
             steps {
                 echo "Pushing ${APP_NAME} App Images to ECR Repo"
-                sh "docker push "${IMAGE_TAG}""
+                sh "docker push '${IMAGE_TAG}'"
             }
         }
     //     stage('Deploy App on Kubernetes Cluster'){
