@@ -14,8 +14,16 @@ pipeline {
         }
         stage('Package application') {
             steps {
-                echo 'Packaging the app into jars with maven'
-                sh "docker run --rm -v $HOME/.m2:/root/.m2 -v $WORKSPACE:/app -w /app maven:3.9.5-amazoncorretto-17 mvn clean package"
+                agent {
+                    docker {
+                        image 'maven:3.9.5-amazoncorretto-17'
+                        args '-v $HOME/.m2:/root/.m2'
+                        reuseNode true
+                    }
+                }
+                steps {
+                    sh 'mvn clean package'
+                }
             }
         }
         stage('Prepare Tags for Docker Images') {
