@@ -2,14 +2,14 @@ pipeline {
     agent any
     environment {
         APP_NAME="neuvector"
-        APP_REPO_NAME="18.206.242.151:8085"
+        APP_REPO_NAME="34.203.222.175:8085"
         AWS_REGION="us-east-1"
     }
     stages {
         stage('Log in to Nexus') {
             steps {
                 echo "logging to nexus "
-                sh 'docker login -u admin -p Ersin_13 18.206.242.151:8085'
+                sh 'docker login -u admin -p Ersin_13 34.203.222.175:8085'
                 }
         }
         // stage('Package application') {
@@ -60,7 +60,7 @@ pipeline {
                 tag: "${BUILD_NUMBER}"
       }  
     }
-        stage('Push Images to ECR Repo') {
+        stage('Push Images to Nexus Repo') {
             steps {
                 echo "Pushing ${APP_NAME} App Images to ECR Repo"
                 sh "docker push '${IMAGE_TAG}'"
