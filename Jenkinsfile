@@ -7,7 +7,7 @@ pipeline {
         stage('Log in to Docker') {
             steps {
                 echo "logging to ECR "
-                sh 'docker login - ersinsari -p Teyyare01** '
+                sh 'docker login -u ersinsari -p Teyyare01** '
                 }
         }
         stage('Build App Docker Images') {
