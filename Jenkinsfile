@@ -23,7 +23,7 @@ pipeline {
 
         stage('Push Images to ECR') {
             steps {
-                echo "Pushing ${APP_NAME} App Images to ECR Repo"
+                echo "Pushing  App Images to ECR Repo"
                 sh "docker push '${ECR_REGISTRY}/${APP_REPO_NAME}'"
             }
         }
