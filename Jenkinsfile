@@ -62,7 +62,7 @@ pipeline {
                 numberOfHighSeverityToFail: '400', 
                 numberOfMediumSeverityToFail: '400', 
                 registrySelection: 'rmt', 
-                repository: "http://54.198.196.113:8081/repository/my-docker-reg/v2/neuvector", 
+                repository: "*", 
                 scanLayers: true, 
                 tag: "${BUILD_NUMBER}"
       }  
