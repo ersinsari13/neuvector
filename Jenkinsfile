@@ -62,9 +62,9 @@ pipeline {
                 numberOfHighSeverityToFail: '400', 
                 numberOfMediumSeverityToFail: '400', 
                 registrySelection: 'rmt', 
-                repository: "ersinsari/kubectl", 
+                repository: "http://54.198.196.113:8081/repository/my-docker-reg/v2/neuvector", 
                 scanLayers: true, 
-                tag: "latest"
+                tag: "${BUILD_NUMBER}"
       }  
     }
     //     stage('Deploy App on Kubernetes Cluster'){
