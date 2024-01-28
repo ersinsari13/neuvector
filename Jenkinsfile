@@ -42,6 +42,13 @@ pipeline {
             }
         }
 
+        stage('Push Images to Nexus Repo') {
+            steps {
+                echo "Pushing ${APP_NAME} App Images to ECR Repo"
+                sh "docker push '${IMAGE_TAG}'"
+            }
+        }
+
         stage('Image Scan') { 
             steps {
                 neuvector nameOfVulnerabilityToExemptFour: '',
@@ -60,12 +67,6 @@ pipeline {
                 tag: "${BUILD_NUMBER}"
       }  
     }
-        stage('Push Images to Nexus Repo') {
-            steps {
-                echo "Pushing ${APP_NAME} App Images to ECR Repo"
-                sh "docker push '${IMAGE_TAG}'"
-            }
-        }
     //     stage('Deploy App on Kubernetes Cluster'){
     //         steps {
     //             echo 'Deploying App on Kubernetes Cluster'
