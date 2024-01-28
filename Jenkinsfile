@@ -11,7 +11,7 @@ pipeline {
         stage('Log in to ECR') {
             steps {
                 echo "logging to ECR "
-                sh 'aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}'
+                sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 995194808144.dkr.ecr.us-east-1.amazonaws.com'
                 }
         }
         stage('Build App Docker Images') {
@@ -42,9 +42,9 @@ pipeline {
                 numberOfHighSeverityToFail: '400', 
                 numberOfMediumSeverityToFail: '400', 
                 registrySelection: 'rmt', 
-                repository: "${ECR_REGISTRY}/${APP_REPO_NAME}", 
+                repository: "995194808144.dkr.ecr.us-east-1.amazonaws.com/flask-app", 
                 scanLayers: true, 
-                tag: "${BUILD_NUMBER}"
+                tag: "latest"
       }  
     }
     //     stage('Deploy App on Kubernetes Cluster'){
