@@ -2,50 +2,30 @@ pipeline {
     agent any
     environment {
         APP_NAME="neuvector"
-        APP_REPO_NAME="54.198.196.113:8085"
+        APP_REPO_NAME="ersin-repo/${APP_NAME}"
         AWS_REGION="us-east-1"
+        AWS_ACCOUNT_ID=sh(script:'aws sts get-caller-identity --query Account --output text',returnStdout:true).trim()
+        ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
     }
     stages {
-        stage('Log in to Nexus') {
+        stage('Log in to ECR') {
             steps {
-                echo "logging to nexus "
-                sh 'docker login -u admin -p Ersin_13 54.198.196.113:8085'
+                echo "logging to ECR "
+                sh 'aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}'
                 }
-        }
-        // stage('Package application') {
-        //     steps {
-        //         agent {
-        //             docker {
-        //                 image 'maven:3.9.5-amazoncorretto-17'
-        //                 args '-v $HOME/.m2:/root/.m2'
-        //                 reuseNode true
-        //             }
-        //         }
-        //         steps {
-        //             sh 'mvn clean package'
-        //         }
-        //     }
-        // }
-        stage('Prepare Tags for Docker Images') {
-            steps {
-                echo 'Preparing Tags for Docker Images'
-                script {
-                    env.IMAGE_TAG="${APP_REPO_NAME}/${APP_NAME}:${BUILD_NUMBER}"
-                }
-            }
         }
         stage('Build App Docker Images') {
             steps {
                 echo 'Building App Dev Images'
-                sh "docker build --force-rm -t '${IMAGE_TAG}' ."
+                sh "docker build --force-rm -t '${ECR_REGISTRY}/${APP_REPO_NAME}:${BUILD_NUMBER}' ."
                 sh 'docker image ls'
             }
         }
 
-        stage('Push Images to Nexus Repo') {
+        stage('Push Images to ECR') {
             steps {
                 echo "Pushing ${APP_NAME} App Images to ECR Repo"
-                sh "docker push '${IMAGE_TAG}'"
+                sh "docker push '${ECR_REGISTRY}/${APP_REPO_NAME}:${BUILD_NUMBER}'"
             }
         }
 
@@ -62,7 +42,7 @@ pipeline {
                 numberOfHighSeverityToFail: '400', 
                 numberOfMediumSeverityToFail: '400', 
                 registrySelection: 'rmt', 
-                repository: "*", 
+                repository: "${ECR_REGISTRY}/${APP_REPO_NAME}:${BUILD_NUMBER}", 
                 scanLayers: true, 
                 tag: "${BUILD_NUMBER}"
       }  
