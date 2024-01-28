@@ -2,30 +2,30 @@ pipeline {
     agent any
     environment {
         APP_NAME="neuvector"
-        APP_REPO_NAME="34.203.222.175:8085"
+        APP_REPO_NAME="54.198.196.113:8085"
         AWS_REGION="us-east-1"
     }
     stages {
         stage('Log in to Nexus') {
             steps {
                 echo "logging to nexus "
-                sh 'docker login -u admin -p Ersin_13 34.203.222.175:8085'
+                sh 'docker login -u admin -p Ersin_13 54.198.196.113:8085'
                 }
         }
-        // stage('Package application') {
-        //     steps {
-        //         agent {
-        //             docker {
-        //                 image 'maven:3.9.5-amazoncorretto-17'
-        //                 args '-v $HOME/.m2:/root/.m2'
-        //                 reuseNode true
-        //             }
-        //         }
-        //         steps {
-        //             sh 'mvn clean package'
-        //         }
-        //     }
-        // }
+        stage('Package application') {
+            steps {
+                agent {
+                    docker {
+                        image 'maven:3.9.5-amazoncorretto-17'
+                        args '-v $HOME/.m2:/root/.m2'
+                        reuseNode true
+                    }
+                }
+                steps {
+                    sh 'mvn clean package'
+                }
+            }
+        }
         stage('Prepare Tags for Docker Images') {
             steps {
                 echo 'Preparing Tags for Docker Images'
