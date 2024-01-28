@@ -2,29 +2,26 @@ pipeline {
     agent any
     environment {
         APP_REPO_NAME="neuvector"
-        AWS_REGION="us-east-1"
-        AWS_ACCOUNT_ID=sh(script:'aws sts get-caller-identity --query Account --output text',returnStdout:true).trim()
-        ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
     }
     stages {
-        stage('Log in to ECR') {
+        stage('Log in to Docker') {
             steps {
                 echo "logging to ECR "
-                sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECR_REGISTRY}'
+                sh 'docker login - ersinsari -p Teyyare01** '
                 }
         }
         stage('Build App Docker Images') {
             steps {
                 echo 'Building App Dev Images'
-                sh "docker build --force-rm -t '${ECR_REGISTRY}/${APP_REPO_NAME}' ."
+                sh "docker build --force-rm -t ersinsari/neuvector:${BUILD_NUMBER} ."
                 sh 'docker image ls'
             }
         }
 
-        stage('Push Images to ECR') {
+        stage('Push Images to Docker-Hub') {
             steps {
-                echo "Pushing  App Images to ECR Repo"
-                sh "docker push '${ECR_REGISTRY}/${APP_REPO_NAME}'"
+                echo "Pushing  App Images to Repo"
+                sh "docker push 'ersinsari/neuvector:${BUILD_NUMBER}'"
             }
         }
 
@@ -41,9 +38,9 @@ pipeline {
                 numberOfHighSeverityToFail: '400', 
                 numberOfMediumSeverityToFail: '400', 
                 registrySelection: 'rmt', 
-                repository: "${ECR_REGISTRY}/${APP_REPO_NAME}", 
+                repository: "ersinsari/neuvector", 
                 scanLayers: true, 
-                tag: "latest"
+                tag: "${BUILD_NUMBER}"
       }  
     }
     //     stage('Deploy App on Kubernetes Cluster'){
