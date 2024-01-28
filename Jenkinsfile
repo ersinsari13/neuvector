@@ -42,7 +42,7 @@ pipeline {
                 numberOfHighSeverityToFail: '400', 
                 numberOfMediumSeverityToFail: '400', 
                 registrySelection: 'rmt', 
-                repository: "${ECR_REGISTRY}/${APP_REPO_NAME}:${BUILD_NUMBER}", 
+                repository: "${ECR_REGISTRY}/${APP_REPO_NAME}", 
                 scanLayers: true, 
                 tag: "${BUILD_NUMBER}"
       }  
