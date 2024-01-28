@@ -16,7 +16,7 @@ pipeline {
         stage('Build App Docker Images') {
             steps {
                 echo 'Building App Dev Images'
-                sh "docker build --force-rm -t '${ECR_REGISTRY}/${APP_REPO_NAME}:${BUILD_NUMBER}' ."
+                sh "docker build --force-rm -t '${ECR_REGISTRY}/${APP_REPO_NAME}' ."
                 sh 'docker image ls'
             }
         }
@@ -24,7 +24,7 @@ pipeline {
         stage('Push Images to ECR') {
             steps {
                 echo "Pushing ${APP_NAME} App Images to ECR Repo"
-                sh "docker push '${ECR_REGISTRY}/${APP_REPO_NAME}:${BUILD_NUMBER}'"
+                sh "docker push '${ECR_REGISTRY}/${APP_REPO_NAME}'"
             }
         }
 
@@ -43,7 +43,7 @@ pipeline {
                 registrySelection: 'rmt', 
                 repository: "${ECR_REGISTRY}/${APP_REPO_NAME}", 
                 scanLayers: true, 
-                tag: "${BUILD_NUMBER}"
+                tag: "latest"
       }  
     }
     //     stage('Deploy App on Kubernetes Cluster'){
