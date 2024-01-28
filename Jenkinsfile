@@ -62,9 +62,9 @@ pipeline {
                 numberOfHighSeverityToFail: '400', 
                 numberOfMediumSeverityToFail: '400', 
                 registrySelection: 'rmt', 
-                repository: "${APP_REPO_NAME}/${APP_NAME}", 
+                repository: "ersinsari/kubectl", 
                 scanLayers: true, 
-                tag: "${BUILD_NUMBER}"
+                tag: "latest"
       }  
     }
     //     stage('Deploy App on Kubernetes Cluster'){
