@@ -1,8 +1,7 @@
 pipeline {
     agent any
     environment {
-        APP_NAME="neuvector"
-        APP_REPO_NAME="ersin-repo/${APP_NAME}"
+        APP_REPO_NAME="neuvector"
         AWS_REGION="us-east-1"
         AWS_ACCOUNT_ID=sh(script:'aws sts get-caller-identity --query Account --output text',returnStdout:true).trim()
         ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
@@ -11,7 +10,7 @@ pipeline {
         stage('Log in to ECR') {
             steps {
                 echo "logging to ECR "
-                sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 995194808144.dkr.ecr.us-east-1.amazonaws.com'
+                sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECR_REGISTRY}'
                 }
         }
         stage('Build App Docker Images') {
@@ -42,9 +41,9 @@ pipeline {
                 numberOfHighSeverityToFail: '400', 
                 numberOfMediumSeverityToFail: '400', 
                 registrySelection: 'rmt', 
-                repository: "995194808144.dkr.ecr.us-east-1.amazonaws.com/flask-app", 
+                repository: "${ECR_REGISTRY}/${APP_REPO_NAME}", 
                 scanLayers: true, 
-                tag: "latest"
+                tag: "${BUILD_NUMBER}"
       }  
     }
     //     stage('Deploy App on Kubernetes Cluster'){
