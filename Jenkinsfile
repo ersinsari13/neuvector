@@ -4,11 +4,17 @@ pipeline {
         APP_REPO_NAME="neuvector"
     }
     stages {
-        stage('Log in to Docker') {
+        stage('Docker Login') {
             steps {
-                echo "logging to ECR "
-                sh 'docker login -u ersinsari -p Teyyare01** '
+                script {
+                    def dockerCredentialsId = 'docker-hub-cred'
+                     withCredentials([usernamePassword(credentialsId: dockerCredentialsId, passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                       sh """
+                            docker login -u \${DOCKER_USERNAME} -p \${DOCKER_PASSWORD}
+                        """
+                     }    
                 }
+            }
         }
         stage('Build App Docker Images') {
             steps {
@@ -43,21 +49,5 @@ pipeline {
                 tag: "${BUILD_NUMBER}"
       }  
     }
-    //     stage('Deploy App on Kubernetes Cluster'){
-    //         steps {
-    //             echo 'Deploying App on Kubernetes Cluster'
-    //             sh '. ./jenkins/deploy_app_on_prod_environment.sh'
-    //         }
-    //     }
-    // }
-    // post {
-    //     always {
-    //         echo 'Deleting all local images'
-    //         sh 'docker image prune -af'
-    //     }
-
-    //     success {
-    //         mail bcc: '', body: 'Congrats !!! CICD Pipeline is successfull.', cc: '', from: '', replyTo: '', subject: 'Test Mail', to: 'sariiersinn13@gmail.com'
-    //         }
     }
 }
