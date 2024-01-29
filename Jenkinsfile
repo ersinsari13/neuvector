@@ -24,6 +24,13 @@ pipeline {
             }
         }
 
+        stage('Push Images to Docker-Hub') {
+            steps {
+                echo "Pushing  App Images to Repo"
+                sh "docker push 'ersinsari/neuvector:${BUILD_NUMBER}'"
+            }
+        }
+
         stage('Image Scan') { 
             steps {
                 neuvector nameOfVulnerabilityToExemptFour: '',
@@ -42,15 +49,6 @@ pipeline {
                 tag: "${BUILD_NUMBER}"
             }  
         }
-
-        stage('Push Images to Docker-Hub') {
-            steps {
-                echo "Pushing  App Images to Repo"
-                sh "docker push 'ersinsari/neuvector:${BUILD_NUMBER}'"
-            }
-        }
-
-
         stage('Deploy') { 
             steps {
                 echo 'Deploy commands ...'
