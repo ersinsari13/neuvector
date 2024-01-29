@@ -41,13 +41,18 @@ pipeline {
                 nameOfVulnerabilityToFailOne: '', 
                 nameOfVulnerabilityToFailThree: '', 
                 nameOfVulnerabilityToFailTwo: '', 
-                numberOfHighSeverityToFail: '400', 
-                numberOfMediumSeverityToFail: '400', 
+                numberOfHighSeverityToFail: '500', 
+                numberOfMediumSeverityToFail: '500', 
                 registrySelection: 'rmt', 
                 repository: "ersinsari/neuvector", 
                 scanLayers: true, 
                 tag: "${BUILD_NUMBER}"
-      }  
+            }  
+        }
+        stage('Deploy') { 
+            steps {
+                echo 'Deploy commands ...'
+            }
+        }
     }
-  }
 }
