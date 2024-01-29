@@ -1,4 +1,13 @@
-FROM amazoncorretto:17-alpine3.18
+FROM python:3.9
+
 WORKDIR /app
-ADD https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.0/deploy/static/provider/cloud/deploy.yaml /app/
-CMD [ "echo", "hello-neuvector" ]
+
+COPY bus_app/requirements.txt .
+
+RUN python3 -m pip install --no-cache-dir -r requirements.txt
+
+ENV FLASK_ENV=development
+
+COPY bus_app/ .
+
+CMD ["python3", "app.py"]

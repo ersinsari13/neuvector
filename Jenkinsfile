@@ -49,5 +49,5 @@ pipeline {
                 tag: "${BUILD_NUMBER}"
       }  
     }
-    }
+  }
 }
